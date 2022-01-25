@@ -11,24 +11,28 @@ from conllu import parse
 
 
 file_results = 'report.txt'
-files_data = ['right.txt', 'left.txt', 'norm.txt']
 cwd = os.getcwd()
 endpoint = 'http://lindat.mff.cuni.cz/services/udpipe/api/process'
-            
+data_dir = os.path.join(cwd, "data")
+
 try:
-    os.mkdir("api")
+    os.mkdir(os.path.join(cwd, "api"))
 except OSError as error:
     if error.errno != errno.EEXIST:
         raise
     pass
+    
+if not os.path.isdir(data_dir):
+    print("Data directory was not found!")
+    sys.exit()
 
 report = open(os.path.join(cwd, file_results), 'w', encoding='utf-8')
 divider = "=" * 100
 
-for file in files_data:
+for file in os.listdir(data_dir):
     bigpos = {}
     
-    f = open(os.path.join(cwd, file), encoding='utf-8')
+    f = open(os.path.join(data_dir, file), encoding='utf-8')
     lines = f.readlines()
     f.close()
     
